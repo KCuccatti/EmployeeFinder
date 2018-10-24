@@ -1,9 +1,20 @@
 $(document).ready(function () {
+    
+    /*
+    ******************** TODO: ********************** 
+    *
+    * Show user confirmation of their information being entered successfully.
+    * Create a modal for showing the employee match.
+    * Add delete and update functionality
+    * 
+    */
 
     // Declare global variables
     var questions = '';
     var answers = [];
     var employeeData = '';
+    var matchingName = '';
+    var matchingPhoto = '';
 
 
     // When getSurveyQuestions ajax function is done, display questions from db
@@ -40,6 +51,7 @@ $(document).ready(function () {
         questions = questionHtml;
     }
 
+
     $('#submit').on('click', function () {
 
         // Gather up answers to questions
@@ -47,7 +59,7 @@ $(document).ready(function () {
             answers.push($(this).find('option:selected').val());
         });
 
-        // 
+        // Ajax post request to insert data into database
         $.post("/postSurveyData",
             {
                 name: $('#name').val(),
@@ -55,16 +67,16 @@ $(document).ready(function () {
                 answers: answers
             },
             function (data, status) {
-                //          alert("Data: " + data + "\nStatus: " + status);
+                // alert("Data: " + data + "\nStatus: " + status);
             });
-
-        $('#match').html(closestMatch(answers));
+        closestMatch(answers);
+        $('#match-name').html(matchingName);
+        $('#match-img').attr('src',matchingPhoto);
     })
 
     // Calculate a users match with an employee based off of answers to questions
     function closestMatch(myAnswers) {
-        let leastDiff = 999; 
-        let matchingName = '';
+        let leastDiff = 999;
         let sum = 0;
 
         for (let i = 0; i < (employeeData.length) - 1; i++) {
@@ -74,14 +86,13 @@ $(document).ready(function () {
             };
 
             // Keep searching for a match if sum > lestDiff
-            if(sum < leastDiff) {
+            if (sum < leastDiff) {
                 matchingName = emplData.name;
                 matchingPhoto = emplData.photo;
                 leastDiff = sum;
             }
             sum = 0;
         }
-        return `{"Name": ${matchingName}, "Photo": ${matchingPhoto}`
     }
 
 
@@ -89,7 +100,7 @@ $(document).ready(function () {
 
     });
 
-    // MAKE AN AJAX CALL TO GET THE EMPLOYEES FROM THE BACK-END API
+    // Make an ajax call to get the employees from the back-end API
     function ajaxGetEmployeeData() {
         return $.ajax({
             type: "GET",

@@ -81,11 +81,7 @@ module.exports = (function (app) {
         
         connection.query("INSERT INTO employee(empl_json) VALUES(?)", json, function (err, result) {
             if (err) throw err;
-            alert("You have been added successfully");
         });
     });
 
-    app.delete('/surveyData', function(req, res) {
-        
-    })
 })
