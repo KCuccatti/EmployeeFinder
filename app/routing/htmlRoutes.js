@@ -7,17 +7,16 @@ const questionsQuery = 'SELECT question_text FROM question';
 const employeeQuery = 'SELECT empl_json FROM employee order by id';
 
 
+ // Establish connection to db
+ const connection = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'root',
+    database: 'employee_db'
+});
+
 module.exports = (function (app) {
-
-    // Establish connection to db
-    const connection = mysql.createConnection({
-        host: 'localhost',
-        port: 3306,
-        user: 'root',
-        password: 'root',
-        database: 'employee_db'
-    });
-
 
     // Home page route
     app.get('/', function (req, res) {
